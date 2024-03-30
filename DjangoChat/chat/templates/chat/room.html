@@ -27,8 +27,8 @@
 
             chatSocket.send(JSON.stringify({
                 'command':"fetch_message",
-                'chat_id' : '2',
-                'customer_id' : '2'
+                'chat_id' : '3',
+                'customer_id' : '3'
             }));
 
         }
@@ -69,10 +69,9 @@
             chatSocket.send(JSON.stringify({
                 'message': message,
                 'command' : "new_message",
-                'username': username,
                 'message_type': 'dealer',
-                'customer' : '2',
-                'chat_id' : '2'
+                'customer' : '3',
+                'chat_id' : '3'
 
             }));
             messageInputDom.value = '';

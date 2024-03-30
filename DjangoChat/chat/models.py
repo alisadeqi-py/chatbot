@@ -6,6 +6,7 @@ from customer.models import Customers
 
 
 class Chat(models.Model):
+    name = models.CharField(max_length=30)
     dealer = models.ForeignKey(User, on_delete=models.CASCADE)
     car = models.ForeignKey(Car, on_delete=models.CASCADE)
     customer = models.OneToOneField(Customers, on_delete=models.CASCADE)

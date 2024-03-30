@@ -4,7 +4,8 @@ from .models import Message
 from car.models import Car
 from chat.chatbot.prompt import Prompt
 from chat.chatbot.bot import chatbot
-from chat.consumers import ChatConsumer
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 import json
 import re
 
@@ -54,16 +55,17 @@ def message_created(sender, instance, created, **kwargs):
                    dealerPhoneNumber = dealerPhoneNumber, dealerOpen = Open, dealerAddress = address,
                    carCost = car_cost, chat_his = bot_messages)
             message = chatbot(prompt = prompt.temp)
-            print(message)
             json_string = re.search(r'```json\n(.*?)\n```', message, re.DOTALL).group(1)
             print(json_data := json.loads(json_string))
             Message.objects.create(chat = instance.chat, content = json_data['outputMessage'], message_type = "AI")
+            room_group_name = f'chat_{instance.chat.name}'
+            print(room_group_name)
+            channel_layer = get_channel_layer()
             text_data = {
-                 'command': "new_message",
-                 'message': message,
-                 'message_type': 'AI'
+                 'message':  json_data['outputMessage'],
+                  "type": "chat.message",
              }
-            # chatconsumer = ChatConsumer()
-            # chatconsumer.receive(text_data = text_data)
+            async_to_sync(channel_layer.group_send)(room_group_name, text_data )
+            print('sent to group')
         else:
             print('message was from AI')

@@ -25,7 +25,6 @@ class ChatConsumer(WebsocketConsumer):
         qs = Message.objects.filter(chat_id = chat_id).all()
         json_message = self.message_serializer(qs)
         json_message = json_message.replace('null', 'None')
-        print(eval(json_message))
         content = {
             "message": eval(json_message),
             "command": "fetch_message"
@@ -43,7 +42,7 @@ class ChatConsumer(WebsocketConsumer):
 
         self.room_name = room_name if room_name else self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = f'chat_{self.room_name}'
-
+        print(self.room_group_name)
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name, self.channel_name)
 
@@ -63,7 +62,8 @@ class ChatConsumer(WebsocketConsumer):
 
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
-
+        chat = Chat.objects.get(id = text_data_json['chat_id'])
+        chat.name = self.room_group_name
 
         command = text_data_json["command"]
 
