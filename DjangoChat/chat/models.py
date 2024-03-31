@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from account.models import CustomeUser
 from car.models import Car
 from customer.models import Customers
 # Create your models here.
@@ -7,10 +7,11 @@ from customer.models import Customers
 
 class Chat(models.Model):
     name = models.CharField(max_length=30)
-    dealer = models.ForeignKey(User, on_delete=models.CASCADE)
+    dealer = models.ForeignKey(CustomeUser, on_delete=models.CASCADE)
     car = models.ForeignKey(Car, on_delete=models.CASCADE)
     customer = models.OneToOneField(Customers, on_delete=models.CASCADE)
     ai_mode = models.BooleanField(default = True)
+    date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f'{self.id}'

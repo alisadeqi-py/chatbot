@@ -1,11 +1,10 @@
 from django.db import models
 from car.models import Car
-from django.contrib.auth.models import User
 # Create your models here.
 
 
 class Customers(models.Model):
-    dealer = models.ForeignKey(User, on_delete=models.CASCADE)
+    dealer = models.ForeignKey("account.CustomeUser", on_delete=models.CASCADE)
     name = models.CharField(max_length=15)
     last_name = models.CharField(max_length=25)
     email = models.EmailField(null=True, blank=True)

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'car',
     'rest_framework',
     'rest_framework_simplejwt',
+    'drf_yasg',
     'customer',
     'account'
 ]
@@ -54,6 +55,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+AUTH_USER_MODEL = "account.CustomeUser"
 
 ROOT_URLCONF = 'DjangoChat.urls'
 
